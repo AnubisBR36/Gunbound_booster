@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Início - GunBound Marketplace{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-white text-center py-5" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('{{ url_for('static', filename='images/gunbound-bg.svg') }}') center/cover;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="fas fa-crosshairs text-warning me-3"></i>
+                    GunBound Marketplace
+                </h1>
+                <p class="lead mb-4">
+                    O maior marketplace de contas de GunBound do Brasil. Compre e venda contas com segurança e qualidade garantida.
+                </p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="{{ url_for('loja') }}" class="btn btn-warning btn-lg me-md-2">
+                        <i class="fas fa-store me-2"></i>Ver Contas
+                    </a>
+                    {% if not session.user_id %}
+                    <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Cadastre-se
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="fw-bold mb-3">Por que escolher nosso marketplace?</h2>
+                <p class="text-muted">Oferecemos a melhor experiência para compradores e vendedores</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="bg-warning text-dark rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-shield-alt fa-2x"></i>
+                    </div>
+                    <h4 class="mt-3">Segurança</h4>
+                    <p class="text-muted">Transações seguras e contas verificadas para sua tranquilidade.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="bg-warning text-dark rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-star fa-2x"></i>
+                    </div>
+                    <h4 class="mt-3">Qualidade</h4>
+                    <p class="text-muted">Apenas contas premium com ranks altos e itens raros.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="bg-warning text-dark rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                        <i class="fas fa-headset fa-2x"></i>
+                    </div>
+                    <h4 class="mt-3">Suporte</h4>
+                    <p class="text-muted">Atendimento especializado para resolver suas dúvidas.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Accounts Section -->
+{% if featured_accounts %}
+<section class="py-5 bg-dark">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="fw-bold text-white mb-3">Contas em Destaque</h2>
+                <p class="text-muted">Confira nossas melhores ofertas do momento</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% for account in featured_accounts %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card bg-secondary border-0 h-100">
+                    <img src="{{ account.imagem_url }}" class="card-img-top" alt="{{ account.nome_da_conta }}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-warning">{{ account.nome_da_conta }}</h5>
+                        <p class="card-text text-light flex-grow-1">{{ account.descricao[:100] }}...</p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="h4 text-success mb-0">R$ {{ "%.2f"|format(account.preco) }}</span>
+                            {% if session.user_id %}
+                                <a href="{{ url_for('buy_account', account_id=account.id) }}" class="btn btn-warning">
+                                    <i class="fas fa-shopping-cart me-1"></i>Comprar
+                                </a>
+                            {% else %}
+                                <a href="{{ url_for('login') }}" class="btn btn-outline-warning">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Login
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{{ url_for('loja') }}" class="btn btn-warning btn-lg">
+                <i class="fas fa-eye me-2"></i>Ver Todas as Contas
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- CTA Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h2 class="fw-bold mb-3">Pronto para começar?</h2>
+                <p class="text-muted mb-4">Junte-se à nossa comunidade e encontre a conta perfeita para você.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    {% if not session.user_id %}
+                    <a href="{{ url_for('register') }}" class="btn btn-warning btn-lg me-md-2">
+                        <i class="fas fa-user-plus me-2"></i>Criar Conta
+                    </a>
+                    {% endif %}
+                    <a href="{{ url_for('videos') }}" class="btn btn-outline-secondary btn-lg">
+                        <i class="fas fa-video me-2"></i>Ver Vídeos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

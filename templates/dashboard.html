@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - GunBound Marketplace{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<section class="py-4 bg-dark text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="mb-1">
+                    <i class="fas fa-user me-3 text-warning"></i>
+                    Olá, {{ user.nome }}!
+                </h1>
+                <p class="text-muted mb-0">Bem-vindo ao seu painel de controle</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <small class="text-muted">
+                    <i class="fas fa-calendar-alt me-1"></i>
+                    Membro desde {{ user.created_at.strftime('%d/%m/%Y') }}
+                </small>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Dashboard Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <!-- User Info Card -->
+            <div class="col-lg-4 mb-4">
+                <div class="card bg-dark border-secondary h-100">
+                    <div class="card-header bg-secondary">
+                        <h5 class="mb-0 text-warning">
+                            <i class="fas fa-user-circle me-2"></i>Informações da Conta
+                        </h5>
+                    </div>
+                    <div class="card-body text-light">
+                        <div class="mb-3">
+                            <small class="text-muted">Nome:</small>
+                            <p class="mb-1">{{ user.nome }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted">Email:</small>
+                            <p class="mb-1">{{ user.email }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted">Contas Compradas:</small>
+                            <p class="mb-1 text-warning fw-bold">{{ purchases|length }}</p>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted">Valor Total Gasto:</small>
+                            <p class="mb-1 text-success fw-bold">
+                                R$ {{ "%.2f"|format(purchases|sum(attribute='purchase_price') or 0) }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions Card -->
+            <div class="col-lg-8 mb-4">
+                <div class="card bg-dark border-secondary h-100">
+                    <div class="card-header bg-secondary">
+                        <h5 class="mb-0 text-warning">
+                            <i class="fas fa-bolt me-2"></i>Ações Rápidas
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <a href="{{ url_for('loja') }}" class="btn btn-warning w-100 btn-lg">
+                                    <i class="fas fa-store me-2"></i>
+                                    Ver Loja
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="{{ url_for('videos') }}" class="btn btn-outline-warning w-100 btn-lg">
+                                    <i class="fas fa-video me-2"></i>
+                                    Ver Vídeos
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4 border-secondary">
+                        
+                        <div class="row text-center">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-headset fa-2x text-warning mb-2"></i>
+                                    <h6 class="text-light">Suporte</h6>
+                                    <p class="text-muted small">Precisa de ajuda? Entre em contato conosco.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-shield-alt fa-2x text-warning mb-2"></i>
+                                    <h6 class="text-light">Segurança</h6>
+                                    <p class="text-muted small">Suas compras estão protegidas.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-star fa-2x text-warning mb-2"></i>
+                                    <h6 class="text-light">Qualidade</h6>
+                                    <p class="text-muted small">Apenas contas premium verificadas.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Purchased Accounts Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card bg-dark border-secondary">
+                    <div class="card-header bg-secondary">
+                        <h5 class="mb-0 text-warning">
+                            <i class="fas fa-shopping-bag me-2"></i>Minhas Contas Compradas
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% if purchases %}
+                            <div class="row g-4">
+                                {% for purchase in purchases %}
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="card bg-secondary border-0">
+                                        <img src="{{ purchase.account.imagem_url }}" class="card-img-top" 
+                                             alt="{{ purchase.account.nome_da_conta }}" style="height: 200px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h6 class="card-title text-warning">{{ purchase.account.nome_da_conta }}</h6>
+                                            <p class="card-text text-light small">{{ purchase.account.descricao[:80] }}...</p>
+                                            
+                                            <div class="row text-center mt-3">
+                                                <div class="col-6">
+                                                    <small class="text-muted">Comprada em:</small>
+                                                    <p class="mb-0 text-light small">{{ purchase.purchase_date.strftime('%d/%m/%Y') }}</p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <small class="text-muted">Valor pago:</small>
+                                                    <p class="mb-0 text-success fw-bold">R$ {{ "%.2f"|format(purchase.purchase_price) }}</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mt-3">
+                                                <span class="badge bg-success w-100">
+                                                    <i class="fas fa-check me-1"></i>Compra Confirmada
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <!-- Empty State -->
+                            <div class="text-center py-5">
+                                <div class="mb-4">
+                                    <i class="fas fa-shopping-cart fa-4x text-muted"></i>
+                                </div>
+                                <h4 class="text-light mb-3">Nenhuma conta comprada ainda</h4>
+                                <p class="text-muted mb-4">Explore nossa loja e encontre a conta perfeita para você!</p>
+                                <a href="{{ url_for('loja') }}" class="btn btn-warning btn-lg">
+                                    <i class="fas fa-store me-2"></i>Ver Contas Disponíveis
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

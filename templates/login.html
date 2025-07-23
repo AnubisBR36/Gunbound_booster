@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Login - GunBound Marketplace{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+                <div class="card bg-dark border-secondary">
+                    <div class="card-header bg-secondary text-center">
+                        <h3 class="mb-0 text-warning">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="POST">
+                            <div class="mb-3">
+                                <label for="email" class="form-label text-light">
+                                    <i class="fas fa-envelope me-2"></i>Email
+                                </label>
+                                <input type="email" class="form-control bg-secondary border-secondary text-light" 
+                                       id="email" name="email" required>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="password" class="form-label text-light">
+                                    <i class="fas fa-lock me-2"></i>Senha
+                                </label>
+                                <input type="password" class="form-control bg-secondary border-secondary text-light" 
+                                       id="password" name="password" required>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-warning btn-lg">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Entrar
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <hr class="my-4 border-secondary">
+                        
+                        <div class="text-center">
+                            <p class="text-muted mb-2">Ainda não tem uma conta?</p>
+                            <a href="{{ url_for('register') }}" class="btn btn-outline-warning">
+                                <i class="fas fa-user-plus me-2"></i>Criar Conta
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gaming Theme Background -->
+                <div class="text-center mt-4">
+                    <img src="https://pixabay.com/get/g17c64fb08af412bf4d1a6d0d3f4853e371b229fd5f94fd9816aafd9cc778da75870a9cc096a5376ab8108b4da0c3717cf7323248b9e3aaf02b8de5d65c3126d2_1280.jpg" 
+                         alt="Gaming Interface" class="img-fluid rounded opacity-50" style="max-height: 200px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
